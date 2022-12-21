@@ -55,7 +55,7 @@ AnimatedGradient.prototype.updateStops = function () {
       endColor = stop.colors[0]
     }
 
-    //interpolate both stop 1&2 colors to get new color based on animaiton unit
+    //interpolate both stop 1&2 colors to get new color based on animation unit
     r = Math.floor(interpolation(startColor.r, endColor.r, Anim.currUnit))
     g = Math.floor(interpolation(startColor.g, endColor.g, Anim.currUnit))
     b = Math.floor(interpolation(startColor.b, endColor.b, Anim.currUnit))
@@ -63,7 +63,7 @@ AnimatedGradient.prototype.updateStops = function () {
     stop.currColor = 'rgb(' + r + ',' + g + ',' + b + ')'
   }
 
-  // update current stop and animation units if interpolaiton is compconste
+  // update current stop and animation units if interpolation is composite
   if (Anim.currUnit >= 1.0) {
     Anim.currUnit = 0
     if (this.currentStop < stopsLength) {
@@ -127,7 +127,7 @@ particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
 
 // manually determined optimal particleCount for MacBook Pro 14-inch screen
 const desiredParticleCount = 700
-const particleCount = Math.floor((maxX * maxY) / 2000)
+const particleCount = Math.floor((maxX * maxY) / 2500)
 const particleRatio = particleCount / desiredParticleCount
 const particleSpeedFactor = (1 / particleRatio) * 1.5
 const particleSizeFactor = 1.5
