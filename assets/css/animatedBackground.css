@@ -1,0 +1,11 @@
+/* https://getbootstrap.com/docs/4.0/utilities/flex/ */
+body,
+canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  z-index: -1;
+}
