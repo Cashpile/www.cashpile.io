@@ -127,10 +127,10 @@ particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
 
 // manually determined optimal particleCount for MacBook Pro 14-inch screen
 const desiredParticleCount = 700
-const particleCount = Math.floor((maxX * maxY) / 2500)
+const particleCount = Math.floor((maxX * maxY) / 333)
 const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 1.5
-const particleSizeFactor = 1.5
+const particleSpeedFactor = (1 / particleRatio) * 1.66
+const particleSizeFactor = 1
 
 // create particles
 const particles = []
@@ -140,17 +140,34 @@ for (let i = 0; i < particleCount; i++) {
 
 // drawing particle
 particle.prototype.draw = function () {
+  // calculate values
+  const newSizeX = 2 * this.size * particleSizeFactor
+  const newSizeY = this.size * particleSizeFactor
+
   // convert Polar coordinates to Cartesian
-  const dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
-  const dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
+  let dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
+  let dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
+
+  // considering particle position relative to center of canvas
+  const dx3 = dx - halfX
+  const dy3 = dy - halfY
+  const distance_from_center = Math.sqrt(Math.pow(dx3, 2) + Math.pow(dy3, 2))
+  const force = -1.5 * Math.log(distance_from_center / 50)
+  dy += dx3 * force
+  dx += -dy3 * force
+
+  // make each particle gravitate towards cursor location using trigonometry
+  let dx2 = mousePosition.x - dx
+  let dy2 = mousePosition.y - dy
+  const distance_from_mouse = Math.sqrt(Math.pow(dx2, 2) + Math.pow(dy2, 2))
+  if (distance_from_mouse < 100) {
+    const force = 1 * Math.log(distance_from_mouse / 100)
+    dx += dx2 * force
+    dy += dy2 * force
+  }
 
   context.fillStyle = particleBackgroundStaticGradient
-  context.fillRect(
-    dx,
-    dy,
-    2 * this.size * particleSizeFactor,
-    this.size * particleSizeFactor
-  )
+  context.fillRect(dx, dy, newSizeX, newSizeY)
 }
 
 // calc new position in polar coord
@@ -161,13 +178,13 @@ particle.prototype.move = function () {
 // particles class
 // @constructor
 function particle() {
-  this.radX = 2 * Math.random() * halfX + 1
-  this.radY = 1.2 * Math.random() * halfY + 1
+  this.radX = (2 * Math.random() * halfX + 1) * 1.25
+  this.radY = (1.2 * Math.random() * halfY + 1) * 0.9
   this.alpha = Math.random() * 360 + 1
   this.speed = Math.random() * 100 < 50 ? 1 : -1
   this.speed *= 0.15
   this.speed *= particleSpeedFactor
-  this.size = Math.random() * 5 + 1
+  this.size = Math.random() * 7.5 + 1
 }
 
 // particles animation
@@ -184,6 +201,26 @@ function render() {
 
   requestAnimationFrame(render)
 }
+
+// !TRACKING MOUSE POSITION
+
+// get mouse position
+const getMousePosition = function (e) {
+  const rect = canvas.getBoundingClientRect()
+  return {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top,
+  }
+}
+
+onmousemove = function (e) {
+  mousePosition = getMousePosition(e)
+}
+
+let mousePosition = { x: 0, y: 0 }
+
+// add mousemove event listener
+canvas.addEventListener('mousemove', onmousemove)
 
 // start animation
 render()
