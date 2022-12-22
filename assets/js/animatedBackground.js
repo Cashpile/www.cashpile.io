@@ -149,12 +149,16 @@ particle.prototype.draw = function () {
   let dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
 
   // make each particle gravitate towards cursor location using trigonometry
-  let dx2 = mousePos.x - dx
-  let dy2 = mousePos.y - dy
+  let dx2 = mousePosition.x - dx
+  let dy2 = mousePosition.y - dy
+
   const distance = Math.sqrt(dx2 * dx2 + dy2 * dy2)
-  const force = Math.log(1000 / distance) * 0.5
-  dx += dx2 * force
-  dy += dy2 * force
+  if (distance < 100) {
+    // add negative sign to attract particles inward.
+    const force = Math.log(distance / 100)
+    dx += dx2 * force
+    dy += dy2 * force
+  }
 
   context.fillStyle = particleBackgroundStaticGradient
   context.fillRect(dx, dy, newSizeX, newSizeY)
@@ -168,8 +172,8 @@ particle.prototype.move = function () {
 // particles class
 // @constructor
 function particle() {
-  this.radX = (2 * Math.random() * halfX + 1) * 1.25 * 2
-  this.radY = (1.2 * Math.random() * halfY + 1) * 0.9 * 2
+  this.radX = (2 * Math.random() * halfX + 1) * 1.25
+  this.radY = (1.2 * Math.random() * halfY + 1) * 0.9
   this.alpha = Math.random() * 360 + 1
   this.speed = Math.random() * 100 < 50 ? 1 : -1
   this.speed *= 0.15
@@ -195,7 +199,7 @@ function render() {
 // !TRACKING MOUSE POSITION
 
 // get mouse position
-const getMousePos = function (e) {
+const getMousePosition = function (e) {
   const rect = canvas.getBoundingClientRect()
   return {
     x: e.clientX - rect.left,
@@ -204,11 +208,10 @@ const getMousePos = function (e) {
 }
 
 onmousemove = function (e) {
-  mousePos = getMousePos(e)
+  mousePosition = getMousePosition(e)
 }
 
-// mouse position
-let mousePos = { x: 0, y: 0 }
+let mousePosition = { x: 0, y: 0 }
 
 // add mousemove event listener
 canvas.addEventListener('mousemove', onmousemove)
