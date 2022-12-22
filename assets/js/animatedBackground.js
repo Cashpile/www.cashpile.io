@@ -127,10 +127,10 @@ particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
 
 // manually determined optimal particleCount for MacBook Pro 14-inch screen
 const desiredParticleCount = 700
-const particleCount = Math.floor((maxX * maxY) / 125)
+const particleCount = Math.floor((maxX * maxY) / 333)
 const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 5
-const particleSizeFactor = 0.33
+const particleSpeedFactor = (1 / particleRatio) * 1.66
+const particleSizeFactor = 0.9
 
 // create particles
 const particles = []
@@ -148,14 +148,20 @@ particle.prototype.draw = function () {
   let dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
   let dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
 
+  // considering particle position relative to center of canvas
+  const dx3 = dx - halfX
+  const dy3 = dy - halfY
+  const distance_from_center = Math.sqrt(Math.pow(dx3, 2) + Math.pow(dy3, 2))
+  const force = -1.5 * Math.log(distance_from_center / 50)
+  dy += dx3 * force
+  dx += -dy3 * force
+
   // make each particle gravitate towards cursor location using trigonometry
   let dx2 = mousePosition.x - dx
   let dy2 = mousePosition.y - dy
-
-  const distance = Math.sqrt(dx2 * dx2 + dy2 * dy2)
-  if (distance < 100) {
-    // add negative sign to attract particles inward.
-    const force = Math.log(distance / 100)
+  const distance_from_mouse = Math.sqrt(Math.pow(dx2, 2) + Math.pow(dy2, 2))
+  if (distance_from_mouse < 100) {
+    const force = 1 * Math.log(distance_from_mouse / 100)
     dx += dx2 * force
     dy += dy2 * force
   }
