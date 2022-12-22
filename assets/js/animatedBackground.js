@@ -127,10 +127,10 @@ particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
 
 // manually determined optimal particleCount for MacBook Pro 14-inch screen
 const desiredParticleCount = 700
-const particleCount = Math.floor((maxX * maxY) / 2500)
+const particleCount = Math.floor((maxX * maxY) / 125)
 const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 1.5
-const particleSizeFactor = 1.5
+const particleSpeedFactor = (1 / particleRatio) * 5
+const particleSizeFactor = 0.33
 
 // create particles
 const particles = []
@@ -140,17 +140,24 @@ for (let i = 0; i < particleCount; i++) {
 
 // drawing particle
 particle.prototype.draw = function () {
+  // calculate values
+  const newSizeX = 2 * this.size * particleSizeFactor
+  const newSizeY = this.size * particleSizeFactor
+
   // convert Polar coordinates to Cartesian
-  const dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
-  const dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
+  let dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
+  let dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
+
+  // make each particle gravitate towards cursor location using trigonometry
+  let dx2 = mousePos.x - dx
+  let dy2 = mousePos.y - dy
+  const distance = Math.sqrt(dx2 * dx2 + dy2 * dy2)
+  const force = Math.log(1000 / distance) * 0.5
+  dx += dx2 * force
+  dy += dy2 * force
 
   context.fillStyle = particleBackgroundStaticGradient
-  context.fillRect(
-    dx,
-    dy,
-    2 * this.size * particleSizeFactor,
-    this.size * particleSizeFactor
-  )
+  context.fillRect(dx, dy, newSizeX, newSizeY)
 }
 
 // calc new position in polar coord
@@ -161,13 +168,13 @@ particle.prototype.move = function () {
 // particles class
 // @constructor
 function particle() {
-  this.radX = 2 * Math.random() * halfX + 1
-  this.radY = 1.2 * Math.random() * halfY + 1
+  this.radX = (2 * Math.random() * halfX + 1) * 1.25 * 2
+  this.radY = (1.2 * Math.random() * halfY + 1) * 0.9 * 2
   this.alpha = Math.random() * 360 + 1
   this.speed = Math.random() * 100 < 50 ? 1 : -1
   this.speed *= 0.15
   this.speed *= particleSpeedFactor
-  this.size = Math.random() * 5 + 1
+  this.size = Math.random() * 7.5 + 1
 }
 
 // particles animation
@@ -184,6 +191,27 @@ function render() {
 
   requestAnimationFrame(render)
 }
+
+// !TRACKING MOUSE POSITION
+
+// get mouse position
+const getMousePos = function (e) {
+  const rect = canvas.getBoundingClientRect()
+  return {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top,
+  }
+}
+
+onmousemove = function (e) {
+  mousePos = getMousePos(e)
+}
+
+// mouse position
+let mousePos = { x: 0, y: 0 }
+
+// add mousemove event listener
+canvas.addEventListener('mousemove', onmousemove)
 
 // start animation
 render()
