@@ -130,7 +130,7 @@ const desiredParticleCount = 700
 const particleCount = Math.floor((maxX * maxY) / 333)
 const particleRatio = particleCount / desiredParticleCount
 const particleSpeedFactor = (1 / particleRatio) * 1.66
-const particleSizeFactor = 0.9
+const particleSizeFactor = 1
 
 // create particles
 const particles = []

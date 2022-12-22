@@ -4,11 +4,12 @@ const audio = document.querySelector('audio')
 button.addEventListener('click', () => {
   if (audio.paused) {
     audio.play()
-    button.textContent = 'PAUSE'
+    button.innerText = 'PAUSE.'
   } else {
     audio.pause()
-    button.textContent = 'CUE THE MUSIC'
+    button.innerText = 'CUE THE MUSIC.'
   }
-  button.style.backgroundColor = 'transparent'
-  button.style.border = '1px solid white'
+  button.style.fontWeight = 'bold'
+  button.style.backgroundColor = 'rgb(255, 255, 255, 0.1)'
+  button.style.border = '0.35vw solid white'
 })
