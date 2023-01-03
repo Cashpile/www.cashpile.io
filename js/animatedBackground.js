@@ -126,11 +126,11 @@ particleBackgroundStaticGradient.addColorStop(0, '#43e97b')
 particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
 
 // manually determined optimal particleCount for MacBook Pro 14-inch screen
-const desiredParticleCount = 700
-const particleCount = Math.floor((maxX * maxY) / 333)
+const desiredParticleCount = 300
+const particleCount = Math.floor((maxX * maxY) / 100000)
 const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 1.66
-const particleSizeFactor = 1
+const particleSpeedFactor = (1 / particleRatio) * 0.025
+const particleSizeFactor = 7.5
 
 // create particles
 const particles = []
@@ -148,6 +148,7 @@ particle.prototype.draw = function () {
   let dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
   let dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
 
+  /*
   // considering particle position relative to center of canvas
   const dx3 = dx - halfX
   const dy3 = dy - halfY
@@ -165,12 +166,17 @@ particle.prototype.draw = function () {
     dx += dx2 * force
     dy += dy2 * force
   }
+  */
 
-  // check that the music button has been clicked
+  /*
+  // only show money when music is playing
   musicIsPlaying = document.getElementById('music-btn').innerText === 'PAUSE.'
   context.fillStyle = musicIsPlaying
     ? particleBackgroundStaticGradient
     : bodyBackgroundAnimatedGradient
+  */
+
+  context.fillStyle = particleBackgroundStaticGradient
   context.fillRect(dx, dy, newSizeX, newSizeY)
 }
 
@@ -206,9 +212,8 @@ function render() {
   requestAnimationFrame(render)
 }
 
+/*
 // !TRACKING MOUSE POSITION
-
-// get mouse position
 const getMousePosition = function (e) {
   const rect = canvas.getBoundingClientRect()
   return {
@@ -225,6 +230,7 @@ let mousePosition = { x: 0, y: 0 }
 
 // add mousemove event listener
 canvas.addEventListener('mousemove', onmousemove)
+*/
 
 // start animation
 render()
