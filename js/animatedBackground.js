@@ -129,8 +129,8 @@ particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
 const desiredParticleCount = 500
 const particleCount = Math.floor((maxX * maxY) / 75000)
 const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 0.02
-const particleSizeFactor = 10
+const particleSpeedFactor = (1 / particleRatio) * 0.025
+const particleSizeFactor = 6.5
 
 // create particles
 const particles = []
@@ -194,7 +194,7 @@ function particle() {
   this.speed = Math.random() * 100 < 50 ? 1 : -1
   this.speed *= 0.15
   this.speed *= particleSpeedFactor
-  this.size = Math.random() * 5 + 1
+  this.size = Math.random() * 5 + 3.5
 }
 
 // particles animation
