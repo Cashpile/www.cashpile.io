@@ -7,9 +7,9 @@ button.addEventListener('click', () => {
     button.innerText = 'PAUSE.'
   } else {
     audio.pause()
-    button.innerText = 'CUE THE MUSIC.'
+    button.innerText = 'MAKE IT RAIN.'
   }
   button.style.fontWeight = 'bold'
   button.style.backgroundColor = 'rgb(255, 255, 255, 0.1)'
-  button.style.border = '0.35vw solid white'
+  button.style.border = '0.15vw solid white'
 })

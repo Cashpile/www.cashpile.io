@@ -166,7 +166,11 @@ particle.prototype.draw = function () {
     dy += dy2 * force
   }
 
-  context.fillStyle = particleBackgroundStaticGradient
+  // check that the music button has been clicked
+  musicIsPlaying = document.getElementById('music-btn').innerText === 'PAUSE.'
+  context.fillStyle = musicIsPlaying
+    ? particleBackgroundStaticGradient
+    : bodyBackgroundAnimatedGradient
   context.fillRect(dx, dy, newSizeX, newSizeY)
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <audio
-    src="assets/music/Naughty By Nature - Here Comes The Money.mp3"
+    src="assets/audio/Naughty By Nature - Here Comes The Money.mp3"
     paused
     loop
   ></audio>
@@ -12,16 +12,18 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
     />
-    <title>Home · Cashpile</title>
+    <title>Cashpile</title>
     <meta
       name="description"
       content="Pay Together! - Pay bills with a fund created collaboratively."
     />
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/fonts/Catamaran.css" />
-    <link rel="stylesheet" href="assets/css/fonts/Lato.css" />
-    <link rel="stylesheet" href="assets/css/fonts/Muli.css" />
-    <link rel="stylesheet" href="assets/css/animatedBackground.css?v=2" />
+    <link rel="shortcut icon" href="assets/icons/shape-transparent.ico" />
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/fonts/Catamaran.css" />
+    <link rel="stylesheet" href="css/fonts/Lato.css" />
+    <link rel="stylesheet" href="css/fonts/Muli.css" />
+    <link rel="stylesheet" href="css/animatedBackground.css?v=2" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -41,9 +43,14 @@
       class="d-flex align-items-center"
       style="color: white; font-size: 2vh; font-weight: 300"
     >
-      <a class="nav-link" href="#">Download</a>
+      <a
+        class="nav-link"
+        href="https://testflight.apple.com/join/2Vd5jJvC"
+        target="_blank"
+        >Download</a
+      >
       <div style="width: 2.5vw"></div>
-      <a class="nav-link" href="#">Contact</a>
+      <a class="nav-link" href="mailto:daniel@cashpile.io">Contact</a>
       <div style="width: 7.5vw"></div>
     </div>
   </header>
@@ -65,7 +72,7 @@
               margin: 0%;
             "
           >
-            <u> Cashpile.</u>
+            <u> Cashpile</u>
           </h1>
           <h3
             style="
@@ -74,7 +81,7 @@
               color: rgb(255, 255, 255);
             "
           >
-            <em><u>It's time to pay.</u></em>
+            <u>Pay together.</u>
           </h3>
           <div style="height: 1.5vh"></div>
           <div class="justify-content-center d-flex">
@@ -84,22 +91,28 @@
               style="
                 height: 7.75vh;
                 width: 33.3vh;
-                font-size: 2.8vh;
+                font-size: 3vh;
                 border-radius: 12.5px;
-                border-width: 0.35vw;
+                border-width: 0.15vw;
                 padding: 0px;
                 background-color: rgb(255, 255, 255, 0.1);
               "
               role="button"
               href="#about"
-              ><b>CUE THE MUSIC.</b></a
+              ><b>MAKE IT RAIN.</b></a
             >
           </div>
           <div style="height: 3vh"></div>
           <div class="d-flex justify-content-center align-items-center">
-            <img src="assets/img/app-store-badge.svg" style="width: 25vh" />
+            <!-- <img src="assets/images/app-store-badge.svg" style="width: 25vh" />
             <div style="width: 1.5vw"></div>
-            <img src="assets/img/google-play-badge.svg" style="width: 25vh" />
+            <img src="assets/images/google-play-badge.svg" style="width: 25vh" /> -->
+            <a
+              href="https://testflight.apple.com/join/2Vd5jJvC"
+              target="_blank"
+            >
+              <img src="assets/images/TestFlight.png" style="width: 25vh" />
+            </a>
           </div>
           <div style="height: 2.5vh"></div>
         </div>
@@ -107,8 +120,8 @@
       <div style="height: 12vh"></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/playMusic.js?v=2"></script>
-    <script src="assets/js/animatedBackground.js?v=2"></script>
+    <script src="js/playMusic.js?v=2"></script>
+    <script src="js/animatedBackground.js?v=2"></script>
   </body>
 
   <footer
@@ -119,13 +132,13 @@
       <p>©&nbsp;CashPile 2022. All Rights Reserved.</p>
       <ul class="list-inline">
         <li class="list-inline-item">
-          <a href="#" style="color: white">Privacy</a>
+          <a href="#privacy" style="color: white">Privacy</a>
         </li>
         <li class="list-inline-item">
-          <a href="#" style="color: white">Terms</a>
+          <a href="#terms" style="color: white">Terms</a>
         </li>
         <li class="list-inline-item">
-          <a href="#" style="color: white">FAQ</a>
+          <a href="#faq" style="color: white">FAQ</a>
         </li>
       </ul>
     </div>
