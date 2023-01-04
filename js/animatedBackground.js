@@ -1,17 +1,52 @@
 // !INITIALIZATION
+canvas = document.getElementById('canvas')
+const context = canvas.getContext('2d')
 
 const maxX = document.body.clientWidth
 const maxY = document.body.clientHeight
 const halfX = maxX / 2
 const halfY = maxY / 2
 
-canvas = document.getElementById('canvas')
-const context = canvas.getContext('2d')
 canvas.width = maxX
 canvas.height = maxY
 
-// !ANIMATED GRADIENT BACKGROUND
+CanvasRenderingContext2D.prototype.roundRect = function (
+  x,
+  y,
+  width,
+  height,
+  radius
+) {
+  if (width < 2 * radius) radius = width / 2
+  if (height < 2 * radius) radius = height / 2
+  this.beginPath()
+  this.moveTo(x + radius, y)
+  this.arcTo(x + width, y, x + width, y + height, radius)
+  this.arcTo(x + width, y + height, x, y + height, radius)
+  this.arcTo(x, y + height, x, y, radius)
+  this.arcTo(x, y, x + width, y, radius)
+  this.closePath()
+  return this
+}
 
+const particleBackgroundStaticGradient = context.createLinearGradient(
+  0,
+  0,
+  canvas.width,
+  canvas.height
+)
+particleBackgroundStaticGradient.addColorStop(0, '#43e97b')
+particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
+
+// manually determined optimal particleCount for MacBook Pro 14-inch screen
+const desiredParticleCount = 500
+const particleCount = Math.floor((maxX * maxY) / 75000)
+const particleRatio = particleCount / desiredParticleCount
+const particleSpeedFactor = (1 / particleRatio) * 0.025
+const particleSizeFactor = 6.5
+const roundRectRadii = [50 / 10, 20 / 40]
+
+// !ANIMATED GRADIENT BACKGROUND
 //animation settings
 const Anim = {
   duration: 1000,
@@ -87,9 +122,10 @@ AnimatedGradient.prototype.draw = function () {
     gradient.addColorStop(pos, color)
   }
 
-  this.context.clearRect(0, 0, this.width, this.height)
-  this.context.fillStyle = gradient
-  this.context.fillRect(0, 0, this.width, this.height)
+  context.clearRect(0, 0, this.width, this.height)
+  context.roundRect(0, 0, this.width, this.height, roundRectRadii)
+  context.fillStyle = gradient
+  context.fill()
 }
 
 const stopAColor = [
@@ -115,23 +151,6 @@ bodyBackgroundAnimatedGradient.addStop(0, stopAColor)
 bodyBackgroundAnimatedGradient.addStop(1, stopBColor)
 
 // !ANIMATED RECTANGLES
-
-const particleBackgroundStaticGradient = context.createLinearGradient(
-  0,
-  0,
-  canvas.width,
-  canvas.height
-)
-particleBackgroundStaticGradient.addColorStop(0, '#43e97b')
-particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
-
-// manually determined optimal particleCount for MacBook Pro 14-inch screen
-const desiredParticleCount = 500
-const particleCount = Math.floor((maxX * maxY) / 75000)
-const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 0.025
-const particleSizeFactor = 6.5
-
 // create particles
 const particles = []
 for (let i = 0; i < particleCount; i++) {
@@ -176,8 +195,9 @@ particle.prototype.draw = function () {
     : bodyBackgroundAnimatedGradient
   */
 
+  context.roundRect(dx, dy, newSizeX, newSizeY, roundRectRadii)
   context.fillStyle = particleBackgroundStaticGradient
-  context.fillRect(dx, dy, newSizeX, newSizeY)
+  context.fill()
 }
 
 // calc new position in polar coord
@@ -200,7 +220,6 @@ function particle() {
 // particles animation
 function render() {
   context.fillStyle = bodyBackgroundAnimatedGradient
-  context.fillRect(0, 0, maxX, maxY)
   bodyBackgroundAnimatedGradient.updateStops()
   bodyBackgroundAnimatedGradient.draw()
 
@@ -232,5 +251,5 @@ let mousePosition = { x: 0, y: 0 }
 canvas.addEventListener('mousemove', onmousemove)
 */
 
-// start animation
+// begin animation
 render()
