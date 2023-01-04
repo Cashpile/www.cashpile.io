@@ -1,5 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- Automatically update JS versions to bypass cache -->
+  <script>
+    // get date and represent as string
+    const today = new Date()
+    const dd = String(today.getDate()).padStart(2, '0')
+    const mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
+    const yyyy = today.getFullYear()
+
+    // get time and represent as string
+    const hour = today.getHours().toString()
+    const minute = today.getMinutes().toString()
+    const second = today.getSeconds().toString()
+
+    // combine date and time into one string
+    const todayDate = yyyy + mm + dd
+    const todayTime = hour + minute + second
+    const todayDateTime = todayDate + todayTime
+
+    // set version number
+    const uniqueVersion = '?v=' + todayDateTime
+
+    // replace version number in all script tags
+    const scriptTags = document.getElementsByTagName('script')
+    for (let i = 0; i < scriptTags.length; i++) {
+      const scriptTag = scriptTags[i]
+      const src = scriptTag.getAttribute('src')
+      if (src) {
+        scriptTag.setAttribute('src', src + uniqueVersion)
+      }
+    }
+
+    // replace version number in all link tags
+    const linkTags = document.getElementsByTagName('link')
+    for (let i = 0; i < linkTags.length; i++) {
+      const linkTag = linkTags[i]
+      const href = linkTag.getAttribute('href')
+      if (href) {
+        linkTag.setAttribute('href', href + uniqueVersion)
+      }
+    }
+  </script>
+
   <audio
     src="assets/audio/Naughty By Nature - Here Comes The Money.mp3"
     paused
@@ -17,13 +59,24 @@
       name="description"
       content="Pay Together! - Pay bills with a fund created collaboratively."
     />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="apple-mobile-web-app-title" content="Cashpile" />
+    <meta name="application-name" content="Cashpile" />
+    <meta name="msapplication-TileColor" content="#00a300" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/fonts/Catamaran.css" />
     <link rel="stylesheet" href="css/fonts/Lato.css" />
     <link rel="stylesheet" href="css/fonts/Muli.css" />
-    <link rel="stylesheet" href="css/animatedBackground.css?v=2" />
+    <link rel="stylesheet" href="css/animatedBackground.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -47,7 +100,7 @@
         ><u>Download</u></a
       >
       <div style="width: 2.5vh"></div>
-      <a class="nav-link" href="mailto:daniel@cashpile.io">Contact</a>
+      <a class="nav-link" href="mailto:dev@cashpile.io">Contact</a>
     </div> -->
     <a href="https://testflight.apple.com/join/2Vd5jJvC" target="_blank">
       <img src="assets/images/TestFlight.png" style="width: 15vh" />
@@ -119,8 +172,26 @@
       <div style="height: 15vh"></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/playMusic.js?v=3"></script>
-    <script src="js/animatedBackground.js?v=5"></script>
+
+    <!-- First, initialize. -->
+    <script src="js/initCanvas.js"></script>
+
+    <!-- Then, load all the utils. -->
+    <script src="js/utils/playMusic.js"></script>
+    <script src="js/utils/trackMousePos.js"></script>
+    <script src="js/utils/trackViewSize.js"></script>
+
+    <!-- Then, load all the models. -->
+    <script src="js/models/AnimGradient.js"></script>
+    <script src="js/models/AnimParticle.js"></script>
+    <script src="js/models/AnimCoin.js"></script>
+    <script src="js/models/AnimBill.js"></script>
+
+    <!-- Then, load all the controllers. -->
+    <script src="js/controllers/background.js"></script>
+
+    <!-- Finally, render animations. -->
+    <script src="js/renderPage.js"></script>
   </body>
 
   <footer

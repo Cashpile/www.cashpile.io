@@ -1,18 +1,3 @@
-# Cashpile.io
+# [Cashpile.io](https://cashpile.io)
 
-Welcome to the landing page for Cashpile: the group payment app that helps friends save money together for future trips.
-
-## Features
-
-* Contribute as little as $10 each, either on a one-time basis or through a subscription.
-* Enable recurring payments, similar to custom subscriptions
-* Request/send a sum of money to multiple people and divide it automatically
-
-## Contributors
-
-* Daniel & Andrew (frontend)
-* Rohan & Will (backend)
-
-## Contact
-
-If you have any questions or suggestions, please don't hesitate to reach out to us at daniel@cashpile.io.
+Built with vanilla JS, HTML, and CSS. No frameworks or libraries.
