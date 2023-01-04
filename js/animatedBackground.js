@@ -10,44 +10,15 @@ const halfY = maxY / 2
 canvas.width = maxX
 canvas.height = maxY
 
-CanvasRenderingContext2D.prototype.roundRect = function (
-  x,
-  y,
-  width,
-  height,
-  radius
-) {
-  if (width < 2 * radius) radius = width / 2
-  if (height < 2 * radius) radius = height / 2
-  this.beginPath()
-  this.moveTo(x + radius, y)
-  this.arcTo(x + width, y, x + width, y + height, radius)
-  this.arcTo(x + width, y + height, x, y + height, radius)
-  this.arcTo(x, y + height, x, y, radius)
-  this.arcTo(x, y, x + width, y, radius)
-  this.closePath()
-  return this
-}
-
-const particleBackgroundStaticGradient = context.createLinearGradient(
-  0,
-  0,
-  canvas.width,
-  canvas.height
-)
-particleBackgroundStaticGradient.addColorStop(0, '#43e97b')
-particleBackgroundStaticGradient.addColorStop(1, '#00c9ff')
-
-// manually determined optimal particleCount for MacBook Pro 14-inch screen
-const desiredParticleCount = 500
-const particleCount = Math.floor((maxX * maxY) / 75000)
-const particleRatio = particleCount / desiredParticleCount
-const particleSpeedFactor = (1 / particleRatio) * 0.025
-const particleSizeFactor = 6.5
-const roundRectRadii = [50 / 10, 20 / 40]
+const rectangleCount = Math.floor((maxX * maxY) / 75000)
+const rectangleRatio = rectangleCount / 500
+const rectangleSpeedFactor = (1 / rectangleRatio) * 0.025
+const rectangleSizeFactor = 7
+// const roundRectRadii = [50 / 10, 20 / 40]
+const roundRectRadii = 2.5
 
 // !ANIMATED GRADIENT BACKGROUND
-//animation settings
+// animation settings
 const Anim = {
   duration: 1000,
   interval: 1,
@@ -112,20 +83,24 @@ AnimatedGradient.prototype.updateStops = function () {
 }
 
 AnimatedGradient.prototype.draw = function () {
-  const gradient = context.createLinearGradient(0, this.width, this.height, 0)
+  const bodyGradient = context.createLinearGradient(
+    0,
+    this.width,
+    this.height,
+    0
+  )
 
   for (let i = 0; i < this.colorStops.length; i++) {
     const stop = this.colorStops[i],
       pos = stop.pos,
       color = stop.currColor
 
-    gradient.addColorStop(pos, color)
+    bodyGradient.addColorStop(pos, color)
   }
 
   context.clearRect(0, 0, this.width, this.height)
-  context.roundRect(0, 0, this.width, this.height, roundRectRadii)
-  context.fillStyle = gradient
-  context.fill()
+  context.fillStyle = bodyGradient
+  context.fillRect(0, 0, this.width, this.height)
 }
 
 const stopAColor = [
@@ -142,33 +117,57 @@ const stopBColor = [
   { r: '21', g: '0', b: '80' },
 ]
 
-const bodyBackgroundAnimatedGradient = new AnimatedGradient(
+const bodyBgAnimatedGradient = new AnimatedGradient(
   context,
   canvas.width,
   canvas.height
 )
-bodyBackgroundAnimatedGradient.addStop(0, stopAColor)
-bodyBackgroundAnimatedGradient.addStop(1, stopBColor)
+bodyBgAnimatedGradient.addStop(0, stopAColor)
+bodyBgAnimatedGradient.addStop(1, stopBColor)
 
 // !ANIMATED RECTANGLES
-// create particles
-const particles = []
-for (let i = 0; i < particleCount; i++) {
-  particles.push(new particle())
+// create rectangles
+const rectangles = []
+for (let i = 0; i < rectangleCount; i++) {
+  rectangles.push(new rectangle())
 }
 
-// drawing particle
-particle.prototype.draw = function () {
+const rectangleBgStaticGradient = context.createLinearGradient(
+  0,
+  0,
+  canvas.width,
+  canvas.height
+)
+rectangleBgStaticGradient.addColorStop(0, '#43e97b')
+rectangleBgStaticGradient.addColorStop(1, '#00c9ff')
+
+const roundRectPath = function (x, y, width, height, radius) {
+  if (width < 2 * radius) radius = width / 2
+  if (height < 2 * radius) radius = height / 2
+
+  let region = new Path2D()
+  region.moveTo(x + radius, y)
+  region.arcTo(x + width, y, x + width, y + height, radius)
+  region.arcTo(x + width, y + height, x, y + height, radius)
+  region.arcTo(x, y + height, x, y, radius)
+  region.arcTo(x, y, x + width, y, radius)
+  region.closePath()
+
+  return region
+}
+
+// drawing rectangle
+rectangle.prototype.draw = function () {
   // calculate values
-  const newSizeX = 2 * this.size * particleSizeFactor
-  const newSizeY = this.size * particleSizeFactor
+  const newSizeX = 2 * this.size * rectangleSizeFactor
+  const newSizeY = this.size * rectangleSizeFactor
 
   // convert Polar coordinates to Cartesian
   let dx = halfX + this.radX * Math.cos((this.alpha / 180) * Math.PI)
   let dy = halfY + this.radY * Math.sin((this.alpha / 180) * Math.PI)
 
   /*
-  // considering particle position relative to center of canvas
+  // considering rectangle position relative to center of canvas
   const dx3 = dx - halfX
   const dy3 = dy - halfY
   const distance_from_center = Math.sqrt(Math.pow(dx3, 2) + Math.pow(dy3, 2))
@@ -176,7 +175,7 @@ particle.prototype.draw = function () {
   dy += dx3 * force
   dx += -dy3 * force
 
-  // make each particle gravitate towards cursor location using trigonometry
+  // make each rectangle gravitate towards cursor location using trigonometry
   let dx2 = mousePosition.x - dx
   let dy2 = mousePosition.y - dy
   const distance_from_mouse = Math.sqrt(Math.pow(dx2, 2) + Math.pow(dy2, 2))
@@ -191,41 +190,42 @@ particle.prototype.draw = function () {
   // only show money when music is playing
   musicIsPlaying = document.getElementById('music-btn').innerText === 'PAUSE.'
   context.fillStyle = musicIsPlaying
-    ? particleBackgroundStaticGradient
-    : bodyBackgroundAnimatedGradient
+    ? rectangleBgAnimatedGradient
+    : bodyBgAnimatedGradient
   */
 
-  context.roundRect(dx, dy, newSizeX, newSizeY, roundRectRadii)
-  context.fillStyle = particleBackgroundStaticGradient
-  context.fill()
+  // draw rectangle
+  context.fillStyle = rectangleBgStaticGradient
+  roundRect = roundRectPath(dx, dy, newSizeX, newSizeY, roundRectRadii)
+  context.fill(roundRect, 'evenodd')
 }
 
 // calc new position in polar coord
-particle.prototype.move = function () {
+rectangle.prototype.move = function () {
   this.alpha += this.speed
 }
 
-// particles class
+// rectangles class
 // @constructor
-function particle() {
+function rectangle() {
   this.radX = (2 * Math.random() * halfX + 1) * 1.25
   this.radY = (1.2 * Math.random() * halfY + 1) * 0.9
   this.alpha = Math.random() * 360 + 1
   this.speed = Math.random() * 100 < 50 ? 1 : -1
   this.speed *= 0.15
-  this.speed *= particleSpeedFactor
+  this.speed *= rectangleSpeedFactor
   this.size = Math.random() * 5 + 3.5
 }
 
-// particles animation
+// rectangles animation
 function render() {
-  context.fillStyle = bodyBackgroundAnimatedGradient
-  bodyBackgroundAnimatedGradient.updateStops()
-  bodyBackgroundAnimatedGradient.draw()
+  context.fillStyle = bodyBgAnimatedGradient
+  bodyBgAnimatedGradient.updateStops()
+  bodyBgAnimatedGradient.draw()
 
-  for (let i = 0; i < particleCount; i++) {
-    particles[i].draw()
-    particles[i].move()
+  for (let i = 0; i < rectangleCount; i++) {
+    rectangles[i].draw()
+    rectangles[i].move()
   }
 
   requestAnimationFrame(render)
