@@ -14,21 +14,43 @@ function genParticles(Particle) {
   return particles
 }
 
-function renderParticles(particles) {
-  for (let i = 0; i < particles.length; i++) {
-    particle = particles[i]
-    particle.draw(particle.fillStyle, particle.sizeFactor, particle.radius)
-    particle.move()
-  }
+function renderParticles(particles, renderCondition = true) {
+  if (renderCondition) {
+    for (let i = 0; i < particles.length; i++) {
+      particle = particles[i]
+      particle.draw(particle.fillStyle, particle.sizeFactor, particle.radius)
+      particle.move()
+    }
 
-  requestAnimationFrame(() => renderParticles(particles))
+    requestAnimationFrame(() => renderParticles(particles))
+  }
 }
 
 // generate particles
-const bills = genParticles(AnimBill)
-const coins = genParticles(AnimCoin)
+const bill = genParticles(AnimBill)
+const coin = genParticles(AnimCoin)
+const coinRush = genParticles(AnimCoinRush)
+const billRush = genParticles(AnimBillRush)
+
+let rushStatus = false
+musicButton.addEventListener('click', () => {
+  toggleRush()
+})
+
+function toggleRush() {
+  rushStatus = !rushStatus
+  console.log(rushStatus)
+
+  if (rushStatus === true) {
+    renderParticles(coinRush, (renderCondition = rushStatus))
+    renderParticles(billRush, (renderCondition = rushStatus))
+    setInterval(toggleRush, 1000 * 5)
+  }
+}
 
 // render elements from back to front
 renderBackground()
-renderParticles(bills)
-renderParticles(coins)
+renderParticles(bill)
+renderParticles(coin)
+renderParticles(coinRush, rushStatus)
+renderParticles(billRush, rushStatus)

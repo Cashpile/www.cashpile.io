@@ -1,15 +1,15 @@
-const button = document.getElementById('music-btn')
+const musicButton = document.getElementById('music-btn')
 const audio = document.querySelector('audio')
 
-button.addEventListener('click', () => {
+musicButton.addEventListener('click', () => {
   if (audio.paused) {
     audio.play()
-    button.innerText = 'PAUSE.'
+    musicButton.innerText = 'PAUSE.'
   } else {
     audio.pause()
-    button.innerText = 'MAKE IT RAIN.'
+    musicButton.innerText = 'MAKE IT RAIN.'
   }
-  button.style.fontWeight = 'bold'
-  button.style.backgroundColor = 'rgb(255, 255, 255, 0.1)'
-  button.style.border = '0.15vw solid white'
+  musicButton.style.fontWeight = 'bold'
+  musicButton.style.backgroundColor = 'rgb(255, 255, 255, 0.1)'
+  musicButton.style.border = '0.15vw solid white'
 })
