@@ -8,7 +8,6 @@ function renderBackground() {
 
 function genParticles(Particle) {
   let particles = []
-  console.log(new Particle().count)
   for (let i = 0; i < new Particle().count; i++) {
     particles.push(new Particle())
   }
