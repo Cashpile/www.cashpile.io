@@ -113,9 +113,6 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/fonts/Catamaran.css" />
-    <link rel="stylesheet" href="css/fonts/Lato.css" />
-    <link rel="stylesheet" href="css/fonts/Muli.css" />
     <link rel="stylesheet" href="css/animatedBackground.css" />
     <link
       rel="stylesheet"
@@ -222,27 +219,26 @@
       </div>
       <div style="height: 13vh"></div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- First, initialize. -->
-    <script src="js/initCanvas.js"></script>
-
-    <!-- Then, load all the utils. -->
+    <!-- Load all utils. -->
     <script src="js/utils/playMusic.js"></script>
     <script src="js/utils/trackMousePos.js"></script>
     <script src="js/utils/trackViewSize.js"></script>
+    <script src="js/utils/hexToRgb.js"></script>
+    <script src="js/utils/renderParticles.js"></script>
 
-    <!-- Then, load all the models. -->
+    <!-- Load all models. -->
     <script src="js/models/AnimGradient.js"></script>
     <script src="js/models/AnimParticle.js"></script>
     <script src="js/models/AnimCoin.js"></script>
     <script src="js/models/AnimBill.js"></script>
 
-    <!-- Then, load all the controllers. -->
-    <script src="js/controllers/background.js"></script>
-
-    <!-- Finally, render animations. -->
-    <script src="js/renderPage.js"></script>
+    <!-- Render all controllers (animations)... -->
+    <!-- ...in the following order, from back to front. -->
+    <script src="js/controllers/canvas.js"></script>
+    <script src="js/controllers/bg.js"></script>
+    <script src="js/controllers/bills.js"></script>
+    <script src="js/controllers/coins.js"></script>
   </body>
 
   <footer
@@ -250,7 +246,15 @@
     style="height: 15vh; background-color: transparent; color: white"
   >
     <div>
-      <p>Cashpile © 2023</p>
+      <p id="copyright"></p>
     </div>
+
+    <!-- automatically set copyright year to current year in footer -->
+    <script>
+      const currentYear = new Date().getFullYear()
+      document.getElementById(
+        'copyright'
+      ).innerText = `Cashpile © ${currentYear}`
+    </script>
   </footer>
 </html>

@@ -1,17 +1,15 @@
 class AnimGradient {
-  constructor(context, width, height, setting) {
+  constructor(context, setting) {
     this.context = context
-    this.width = width
-    this.height = height
     this.setting = setting
     this.colorStops = []
     this.currentStop = 0
   }
-  addStop(pos, colors) {
+  addStop = (pos, colors) => {
     const stop = { pos: pos, colors: colors, currColor: null }
     this.colorStops.push(stop)
   }
-  updateStops() {
+  updateStops = () => {
     //interpolate colors of stops
     const steps = this.setting.duration / this.setting.interval,
       stepU = this.setting.stepUnit / steps
@@ -56,11 +54,11 @@ class AnimGradient {
 
     this.setting.currUnit += stepU //increment animation unit
   }
-  draw() {
+  draw = () => {
     const bodyGradient = context.createLinearGradient(
       0,
-      this.width,
-      this.height,
+      canvas.width,
+      canvas.height,
       0
     )
 
@@ -72,11 +70,18 @@ class AnimGradient {
       bodyGradient.addColorStop(pos, color)
     }
 
-    context.clearRect(0, 0, this.width, this.height)
+    context.clearRect(0, 0, canvas.width, canvas.height)
     context.fillStyle = bodyGradient
-    context.fillRect(0, 0, this.width, this.height)
+    context.fillRect(0, 0, canvas.width, canvas.height)
   }
-  interpolate(a, b, u) {
+  interpolate = (a, b, u) => {
     return (1 - u) * a + u * b
+  }
+  render = () => {
+    context.fillStyle = this
+    this.updateStops()
+    this.draw()
+
+    requestAnimationFrame(this.render)
   }
 }

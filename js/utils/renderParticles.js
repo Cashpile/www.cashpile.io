@@ -1,11 +1,3 @@
-function renderBackground() {
-  context.fillStyle = background
-  background.updateStops()
-  background.draw()
-
-  requestAnimationFrame(renderBackground)
-}
-
 function genParticles(Particle) {
   let particles = []
   for (let i = 0; i < new Particle().count; i++) {
@@ -23,12 +15,3 @@ function renderParticles(particles) {
 
   requestAnimationFrame(() => renderParticles(particles))
 }
-
-// generate particles
-const bills = genParticles(AnimBill)
-const coins = genParticles(AnimCoin)
-
-// render elements from back to front
-renderBackground()
-renderParticles(bills)
-renderParticles(coins)
