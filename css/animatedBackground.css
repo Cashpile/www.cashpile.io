@@ -1,3 +1,7 @@
+/* Monserrat Alternatives: font suggested by designer */
+/* title: bold 700, description: thin 100 */
+@import url('https://fonts.googleapis.com/css?family=Montserrat+Alternates:100,200,300,400,500,600,700,800,900');
+
 /* https://getbootstrap.com/docs/4.0/utilities/flex/ */
 body,
 canvas {
